@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Painel - SOS Sul</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background-color: #f8f9fa; }
+        .navbar { background-color: #00529B; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .container { max-width: 900px; margin: 30px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        
+        h2 { color: #00529B; }
+        
+        /* Estilos dos Botões */
+        .btn { padding: 10px 20px; border-radius: 5px; cursor: pointer; text-decoration: none; color: white; border: none; font-size: 14px; display: inline-block; }
+        .btn-logout { background-color: #dc3545; }
+        .btn-donate { background-color: #28a745; font-size: 16px; font-weight: bold; padding: 15px 30px; text-align: center;}
+        .btn-donate:hover { background-color: #218838; }
+
+        .card { border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 8px; }
+        .card-highlight { background-color: #e9f7ef; border-left: 5px solid #28a745; text-align: center; }
+
+        /* Estilo da Tabela */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+
+    <!-- Barra do Topo -->
+    <div class="navbar">
+        <h3>Olá, {{ nome_usuario }}!</h3>
+        <a href="/logout" class="btn btn-logout">Sair do Sistema</a>
+    </div>
+
+    <div class="container">
+        
+        <!-- MUDANÇA 1: Botão agora leva para a tela de doação -->
+        <section class="card card-highlight">
+            <h2>💖 Apoie a Causa</h2>
+            <p>Sua doação ajuda centenas de famílias e faz a diferença.</p>
+            <br>
+            <a href="/tela_doacao" class="btn btn-donate">FAZER UMA NOVA DOAÇÃO</a>
+        </section>
+
+        <section class="card">
+            <h2>💸 Histórico de Doações</h2>
+            <p><strong>Total Doado por Você:</strong> R$ {{ total_doado }}</p>
+            
+            <!-- MUDANÇA 2 e 3: Ajuste nos nomes das variáveis da tabela -->
+            {% if lista_doacoes %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Valor (R$)</th>
+                            <th>Forma</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for doacao in lista_doacoes %}
+                        <tr>
+                            <!-- Usamos 'data_formatada' que criamos no Python -->
+                            <td>{{ doacao.data_formatada }}</td>
+                            
+                            <td>R$ {{ doacao.valor }}</td>
+                            
+                            <!-- Usamos o nome exato da coluna do banco: 'forma_pagamento' -->
+                            <td>{{ doacao.forma_pagamento }}</td>
+                            
+                            <td style="color: green; font-weight: bold;">{{ doacao.status }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p style="color: #666; margin-top: 10px;">Você ainda não fez doações. Que tal ser a primeira hoje?</p>
+            {% endif %}
+        </section>
+
+    </div>
+
+</body>
+</html>

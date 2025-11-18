@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Fazer Doação - SOS Sul</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f8f9fa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { text-align: center; color: #28a745; }
+        label { display: block; margin-top: 15px; font-weight: bold; color: #555; }
+        input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 5px; margin-top: 20px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        button:hover { background: #218838; }
+        .back-link { display: block; text-align: center; margin-top: 15px; color: #007bff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Fazer Doação</h2>
+        <p style="text-align: center; color: #666;">Ajude quem precisa agora mesmo.</p>
+
+        <form action="/processar_doacao" method="POST">
+            <label>Valor da Doação (R$):</label>
+            <input type="number" name="valor" step="0.01" min="1" placeholder="Ex: 50.00" required>
+
+            <label>Forma de Pagamento:</label>
+            <select name="forma" required>
+                <option value="PIX">PIX</option>
+                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                <option value="Boleto">Boleto Bancário</option>
+            </select>
+
+            <button type="submit">Confirmar Doação</button>
+        </form>
+
+        <a href="/menu" class="back-link">Voltar ao Menu</a>
+    </div>
+</body>
+</html>

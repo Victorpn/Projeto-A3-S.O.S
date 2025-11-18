@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro - SOS Sul</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #e9ecef; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { text-align: center; color: #333; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin: 8px 0 20px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        label { font-weight: bold; color: #555; }
+        button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        button:hover { background: #218838; }
+        .msg { color: red; text-align: center; margin-bottom: 15px; }
+        a { display: block; text-align: center; margin-top: 20px; color: #007bff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Criar Nova Conta</h2>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="msg">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="/salvar" method="POST">
+            <label>Nome Completo</label>
+            <input type="text" name="nome" required placeholder="Ex: Maria Silva">
+
+            <label>E-mail</label>
+            <input type="email" name="email" required placeholder="maria@email.com">
+
+            <label>Senha</label>
+            <input type="password" name="senha" required placeholder="Crie uma senha segura">
+
+            <button type="submit">Cadastrar Usuário</button>
+        </form>
+
+        <a href="/">Voltar para Login</a>
+    </div>
+</body>
+</html>
