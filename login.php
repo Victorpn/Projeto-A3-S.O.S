@@ -150,7 +150,7 @@ $erro_login = isset($_GET['error']) ? "Credenciais inválidas. Tente novamente."
             <form action="processar_login.php" method="POST">
                 
                 <label for="email">E-mail ou Usuário:</label>
-                <input type="email" id="email" name="email" required>
+                <input type="text" id="email" name="email" required>
 
                 <label for="senha">Senha:</label>
                 <input type="password" id="senha" name="senha" required>

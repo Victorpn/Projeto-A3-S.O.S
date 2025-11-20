@@ -31,7 +31,7 @@
         <h2>💖 Apoie Nossa Causa</h2>
         <p>Sua doação garante recursos essenciais para continuar nosso trabalho. Escolha como quer ajudar!</p>
         
-        <a href="link_para_sua_plataforma_de_pagamento.php" class="btn btn-success">
+        <a href="doarAgora.php" class="btn btn-success">
             ✨ DOAR AGORA!
         </a>
         
@@ -83,7 +83,7 @@
         <h2>🤝 Seja um Voluntário</h2>
         <p>Invista seu tempo e talento para criar um impacto direto e transformador na vida de quem mais precisa.</p>
         
-        <a href="link_para_formulario_voluntariado.php" class="btn btn-primary">
+        <a href="serVoluntario.php" class="btn btn-primary">
             QUERO SER VOLUNTÁRIO
         </a>
 
