@@ -12,6 +12,23 @@ try {
     die("Erro ao conectar ao DB: " . $e->getMessage());
 }
 
+
+// ===========================================
+// FUNÇÃO PARA GERAR NÚMERO DE REMESSA ÚNICO
+// ===========================================
+function gerarNumeroRemessa($pdo) {
+    do {
+        $codigo = "REM" . rand(100000, 999999); // Ex: REM483912
+        $sql = "SELECT COUNT(*) FROM doacoes WHERE numero_remessa = :c";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':c' => $codigo]);
+        $existe = $stmt->fetchColumn();
+    } while ($existe > 0);
+
+    return $codigo;
+}
+
+
 // ===========================================
 // PROCESSAR AÇÕES (atualizar status)
 // ===========================================
@@ -19,21 +36,36 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
     $id = intval($_GET['id']);
     $action = $_GET['action'];
 
-    // Atualiza o status
-    if ($action === "agendar") {
-        $sql = "UPDATE doacoes SET status_logistica = 'Agendado' WHERE id = :id AND tipo_doacao = 'Bens'";
+    // Coletado ➜ gera número de remessa + atualiza status
+    if ($action === "coletado") {
+
+        $remessa = gerarNumeroRemessa($pdo);
+
+        $sql = "UPDATE doacoes 
+                SET status_logistica = 'Coletado', numero_remessa = :r
+                WHERE id = :id AND tipo_doacao = 'Bens'";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ':id' => $id,
+            ':r'  => $remessa
+        ]);
+
     } elseif ($action === "recebido") {
         $sql = "UPDATE doacoes SET status_logistica = 'Em Estoque' WHERE id = :id AND tipo_doacao = 'Bens'";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':id' => $id]);
+
     } elseif ($action === "distribuido") {
         $sql = "UPDATE doacoes SET status_logistica = 'Distribuído' WHERE id = :id AND tipo_doacao = 'Bens'";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':id' => $id]);
     }
-
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([':id' => $id]);
 
     header("Location: gerenciar_logistica_bens.php");
     exit;
 }
+
 
 // ===========================================
 // BUSCAR DOAÇÕES DE BENS NO BANCO
@@ -41,15 +73,6 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
 $sql = "SELECT * FROM doacoes WHERE tipo_doacao = 'Bens' ORDER BY data_doacao DESC";
 $stmt = $pdo->query($sql);
 $solicitacoes_bens = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Mapeamento de nomes amigáveis
-$item_map = [
-    'alimentos' => 'Alimentos',
-    'roupas' => 'Roupas/Cobertores',
-    'higiene' => 'Higiene/Limpeza',
-    'moveis' => 'Móveis/Eletrodomésticos',
-    'outros' => 'Outros Itens'
-];
 
 ?>
 <!DOCTYPE html>
@@ -69,19 +92,21 @@ $item_map = [
             border-radius:6px; text-decoration:none; font-weight:bold;
         }
         .header-adm a:hover { background:#FFA500; color:#00529B; }
+
         table { width:100%; border-collapse: collapse; background:#fff; }
         th { background:#e0eaff; padding:12px; text-align:left; }
         td { padding:10px; border-bottom:1px solid #eee; }
+
         .status-badge {
             padding:6px 10px; border-radius:4px; font-size:0.85em; font-weight:bold;
         }
         .A-Coletar { background:#fff3cd; color:#cc9a06; }
-        .Agendado { background:#cde2ff; color:#00529B; }
+        .Coletado { background:#cde2ff; color:#00529B; }
         .Em-Estoque { background:#d4edda; color:#155724; }
         .Distribuído { background:#ffe0e0; color:#a30000; }
 
         .btn { padding:6px 10px; border-radius:4px; color:#fff; text-decoration:none; }
-        .agendar { background:#FFA500; }
+        .coletado { background:#FFA500; }
         .recebido { background:#28a745; }
         .distribuido { background:#d9534f; }
     </style>
@@ -105,6 +130,7 @@ $item_map = [
             <th>Itens</th>
             <th>Data</th>
             <th>Status</th>
+            <th>Remessa</th>
             <th>Ações</th>
         </tr>
 
@@ -130,12 +156,15 @@ $item_map = [
                     </td>
 
                     <td>
-                        <?php if ($s['status_logistica'] === "A Coletar"): ?>
-                            <a class="btn agendar" href="?action=agendar&id=<?= $s['id'] ?>">Agendar</a>
+                        <?= $s['numero_remessa'] ? $s['numero_remessa'] : "-" ?>
+                    </td>
 
-                        <?php elseif ($s['status_logistica'] === "Agendado"): ?>
-                            <a class="btn receb
-ido" href="?action=recebido&id=<?= $s['id'] ?>">Marcar Recebido</a>
+                    <td>
+                        <?php if ($s['status_logistica'] === "A Coletar"): ?>
+                            <a class="btn coletado" href="?action=coletado&id=<?= $s['id'] ?>">Coletado</a>
+
+                        <?php elseif ($s['status_logistica'] === "Coletado"): ?>
+                            <a class="btn recebido" href="?action=recebido&id=<?= $s['id'] ?>">Marcar Recebido</a>
 
                         <?php elseif ($s['status_logistica'] === "Em Estoque"): ?>
                             <a class="btn distribuido" href="?action=distribuido&id=<?= $s['id'] ?>">Distribuído</a>
@@ -149,7 +178,7 @@ ido" href="?action=recebido&id=<?= $s['id'] ?>">Marcar Recebido</a>
 
         <?php else: ?>
             <tr>
-                <td colspan="8" style="text-align:center; padding:20px;">
+                <td colspan="9" style="text-align:center; padding:20px;">
                     Nenhuma doação de bens registrada.
                 </td>
             </tr>

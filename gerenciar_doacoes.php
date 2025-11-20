@@ -47,6 +47,20 @@ if (isset($_SESSION['mensagem_admin_financeiro'])) {
     unset($_SESSION['mensagem_admin_financeiro']);
 }
 
+/* ============================================================
+   ATUALIZAR AUTOMATICAMENTE PIX COMO "Confirmado"
+============================================================ */
+try {
+    $sqlPix = "UPDATE doacoes 
+               SET status_financeiro = 'Confirmado'
+               WHERE tipo_doacao = 'Dinheiro'
+               AND tipo_pagamento = 'PIX'
+               AND status_financeiro = 'Pendente'";
+    $pdo->exec($sqlPix);
+} catch (Exception $e) {
+    echo "Erro ao atualizar PIX automático: " . $e->getMessage();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">

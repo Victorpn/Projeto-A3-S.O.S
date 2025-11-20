@@ -91,6 +91,7 @@ FORMULÁRIO HTML
         body { font-family: Arial; padding: 20px; }
         .box { border: 1px solid #ccc; padding: 20px; width: 400px; }
         .hidden { display: none; }
+        
     </style>
 
     <script>
