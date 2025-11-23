@@ -88,9 +88,96 @@ FORMULÁRIO HTML
     <title>Doar Agora</title>
 
     <style>
-        body { font-family: Arial; padding: 20px; }
-        .box { border: 1px solid #ccc; padding: 20px; width: 400px; }
-        .hidden { display: none; }
+        <style>
+    body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: #f2f6ff;
+        margin: 0;
+        padding: 40px 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    h1 {
+        text-align: center;
+        color: #003366;
+        margin-bottom: 25px;
+        font-size: 32px;
+        font-weight: 700;
+    }
+
+    form {
+        background: #ffffff;
+        padding: 30px 40px;
+        border-radius: 12px;
+        width: 420px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    label {
+        font-weight: bold;
+        color: #003366;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        border: 1px solid #b5c7e3;
+        border-radius: 8px;
+        font-size: 14px;
+        outline: none;
+        transition: 0.2s;
+        background: #f8faff;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: #003366;
+        background: #ffffff;
+        box-shadow: 0 0 5px rgba(0,51,102,0.2);
+    }
+
+    button {
+        width: 100%;
+        background: #003366;
+        color: #fff;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.2s;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background: #0055aa;
+    }
+
+    .box {
+        border: 1px solid #d0d9ea;
+        background: #f9fbff;
+        padding: 18px;
+        border-radius: 10px;
+        margin-top: 10px;
+        box-shadow: inset 0 0 6px rgba(0,0,0,0.05);
+    }
+
+    h3 {
+        color: #003366;
+        margin-top: 0;
+        text-align: center;
+    }
+
+    .hidden {
+        display: none;
+    }
+</style>
         
     </style>
 
